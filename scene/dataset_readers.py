@@ -261,10 +261,10 @@ def storePly(path, xyz, rgb):
 
 
 def readColmapSceneInfo(path, images, eval, n_views=0, llffhold=8):
-    # ply_path = os.path.join(path, "sparse/0/points3D.ply")
-    # bin_path = os.path.join(path, "sparse/0/points3D.bin")
-    # ply_path = os.path.join(path, str(n_views) + "_views/dense/fused.ply")
-    ply_path = os.path.join(path, "3_views/dense/fused.ply")
+    ply_path = os.path.join(path, "sparse/0/points3D.ply")
+    bin_path = os.path.join(path, "sparse/0/points3D.bin")
+    ply_path = os.path.join(path, str(n_views) + "_views/dense/fused.ply")
+    #ply_path = os.path.join(path, "3_views/dense/fused.ply")
     # ply_path = os.path.join(path, "dense/0/points3D.ply")
 
     try:
@@ -279,10 +279,10 @@ def readColmapSceneInfo(path, images, eval, n_views=0, llffhold=8):
         cam_intrinsics = read_intrinsics_text(cameras_intrinsic_file)
 
 
-    # if not os.path.exists(ply_path):
-    #     print("Converting point3d.bin to .ply, will happen only the first time you open the scene.")
-    #     xyz, rgb, _ = read_points3D_binary(bin_path)
-    #     storePly(ply_path, xyz, rgb)
+    if not os.path.exists(ply_path):
+        print("Converting point3d.bin to .ply, will happen only the first time you open the scene.")
+        xyz, rgb, _ = read_points3D_binary(bin_path)
+        storePly(ply_path, xyz, rgb)
     # try:
     #     extended_pcd = fetchPly(ply_path)
     # except:
