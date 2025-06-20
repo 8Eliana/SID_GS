@@ -78,15 +78,19 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True):
 
 def get_vit_feature(x, ext):
     """
-    :x: shape(batch, channel, height, width)
+    :x: shape (B, C, H, W) in range [0, 1]
+    :ext: VitExtractor instance
+    Returns: CLS token feature or averaged patch tokens
     """
-    mean = torch.tensor([0.485, 0.456, 0.406],
-                        device=x.device).reshape(1, 3, 1, 1)
-    std = torch.tensor([0.229, 0.224, 0.225],
-                        device=x.device).reshape(1, 3, 1, 1)
-    x = F.interpolate(x, size=(224, 224))
-    x = (x - mean) / std
-    return ext.get_feature_from_input(x)[-1][0, 0, :]
+    mean = torch.tensor([0.485, 0.456, 0.406], device=x.device).reshape(1, 3, 1, 1)
+    std = torch.tensor([0.229, 0.224, 0.225], device=x.device).reshape(1, 3, 1, 1)
+
+    x = F.interpolate(x, size=(224, 224))  # DINOv2 default input
+    x = (x - mean) / std  # Normalize
+    patch_tokens = ext.get_feature_from_input(x)  # [B, N, D]
+    return patch_tokens.mean(dim=1)  # Average over patches
+
+
 
 def window_partition(x, window_size):
     """

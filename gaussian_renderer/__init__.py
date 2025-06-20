@@ -18,7 +18,7 @@ from gaussian_utils.sh_utils import eval_sh
 
 
 def render(viewpoint_camera, pc, pipe, bg_color : torch.Tensor, scaling_modifier = 1.0,
-           override_color = None, white_bg = False):
+           override_color = None,white_bg = False): #is_train=False, iteration=None, white_bg = False):
     """
     Render the scene.
 
@@ -88,6 +88,19 @@ def render(viewpoint_camera, pc, pipe, bg_color : torch.Tensor, scaling_modifier
             shs = pc.get_features
     else:
         colors_precomp = override_color
+
+    # # DropGaussian
+    # if is_train:
+    #     # Create initial compensation factor (1 for each Gaussian)
+    #     compensation = torch.ones(opacity.shape[0], dtype=torch.float32, device="cuda")
+
+    #     # Apply DropGaussian with compensation
+    #     drop_rate = 0.2 * (iteration/10000)
+    #     d = torch.nn.Dropout(p=drop_rate)
+    #     compensation = d(compensation)
+
+    #     # Apply to opacity
+    #     opacity = opacity * compensation[:, None]
 
     # import time
     # torch.cuda.synchronize()

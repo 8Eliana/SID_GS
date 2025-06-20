@@ -218,7 +218,7 @@ def training(dataset, opt, pipe, args, metrics):
     viewpoint_stack, pseudo_stack = None, None
 
     # Set up ViT extractor
-    vit_ext0 = VitExtractor(model_name='dino_vits16', device="cuda:0")
+    vit_ext0 = VitExtractor(model_name='dinov2_vitg14', device="cuda:0")
 
     # ------------------------------- Training Loop -------------------------------
     for iteration in range(first_iter, opt.iterations + 1):
@@ -235,6 +235,7 @@ def training(dataset, opt, pipe, args, metrics):
         viewpoint_cam = viewpoint_stack.pop(randint(0, len(viewpoint_stack) - 1))
 
         # Forward pass: render
+        #render_pkg = render(viewpoint_cam, gaussians, pipe, background,is_train=True,iteration=iteration)
         render_pkg = render(viewpoint_cam, gaussians, pipe, background)
         image = render_pkg["render"]
         viewspace_point_tensor = render_pkg["viewspace_points"]
